@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="logo.png" alt="logo" id="logo">
+        </div>
+
+        <div class="navbar">
+            <ul class="navbar-list">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#readings">Readings</a></li>
+                <li><a href="#ref-scale">Reference<br>Scale</a></li>
+                <li><a href="#purification-tips">Purification<br>Tips</a></li>
+                <li><a href="#our-team">Our Team</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="home" id="home">
+    <div class="home-overlay"></div>
+    <div class="home-content">
+        <p class="home-subtitle">Real-Time Monitoring</p>
+        <h1 class="home-title"><i>Know What's In<br>Your Water</i></h1>
+        <p class="home-desc">Instant analysis of water quality parameters right from your device.</p>
+        <button class="scan-btn" onclick="document.getElementById('readings').scrollIntoView({ behavior: 'smooth' })">
+            <span class="scan-btn-icon"></span>
+            Start Scanning
+        </button>
+    </div>
+    </section>
+
+    <!-- Reading Section -->
+
+    <section class="readings" id="readings">
+    <div class="readings-container">
+        <div class="readings-header">
+            <p class="readings-label">Live Analysis</p>
+            <h2 class="readings-title">WATER QUALITY READINGS</h2>
+        </div>
+        <button class="scan-btn" onclick="connectSerial()" 
+            style="margin: 30px auto; display: flex;">
+            Connect Arduino
+        </button>
+        <div class="readings-cards">
+
+            <!-- Graph Card -->
+            <div class="reading-card">
+                <div class="card-top">
+                    <span class="card-tag">Photodiode Signal</span>
+                    <span class="card-live"><span class="live-dot"></span>Live</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="photodiodeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Numerical Card -->
+                <div class="reading-card">
+                    <div class="card-top">
+                        <span class="card-tag">Output Value</span>
+                        <span class="card-live"><span class="live-dot"></span>Live</span>
+                    </div>
+                    <div class="numerical-display">
+                        <p class="numerical-label">Photodiode Reading</p>
+                        <h2 class="numerical-value" id="pdValue" style="font-size: 24px; color: #a0aec0;">No data received yet.</h2>
+                        <p class="numerical-unit">ADC Units</p>
+                    </div>
+                    <div class="status-display" id="statusDisplay">
+                        <div class="status-badge" id="statusBadge" style="background-color: rgba(0,0,0,0.05); color: #a0aec0; border: 1.5px solid rgba(0,0,0,0.1);">
+                            <span class="status-icon">–</span>
+                            <span class="status-text" id="statusText">Awaiting Connection...</span>
+                        </div>
+                        <p class="status-sub" id="statusSub">Connect your Arduino to begin scanning</p>
+                      
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Reference Scale Section-->
+
+    <section class="ref-scale" id="ref-scale">
+        <div class="scale-container">
+
+            <div class="readings-header">
+                <p class="readings-label">How It Works</p>
+                <h2 class="readings-title">Reference Scale</h2>
+                <p class="scale-intro">All readings are based on photodiode ADC values measured in real time. Use this scale to understand your water quality output.</p>
+            </div>
+
+            <div class="spectrum-wrapper">
+                <div class="spectrum-bar">
+                    <div class="spectrum-segment danger"></div>
+                    <div class="spectrum-segment warning"></div>
+                    <div class="spectrum-segment optimal"></div>
+                </div>
+                <div class="spectrum-labels">
+                    <span>0</span>
+                    <span>400</span>
+                    <span>600</span>
+                    <span>1023</span>
+                </div>
+                <div class="spectrum-tags">
+                    <span style="color: #7b00cc;">High Microplastics</span>
+                    <span style="color: #cc2200;">Not Consummable</span>
+                    <span style="color: #1a82cc;">Optimal & Pure</span>
+                </div>
+            </div>
+
+            <div class="scale-cards">
+
+                <div class="scale-card optimal-card">
+                    <div class="scale-card-top">
+                        <span class="scale-range">600 — 1023</span>
+                        <span class="scale-badge optimal">✓ Optimal</span>
+                    </div>
+                    <h3 class="scale-card-title">Optimal & Pure</h3>
+                    <p class="scale-card-desc">Water is clean and safe for consumption. Photodiode detects high light transmission indicating low particle interference.</p>
+                    <div class="scale-card-footer">
+                        <span class="scale-footer-label">ADC Range</span>
+                        <span class="scale-footer-value optimal-text">600 and above</span>
+                    </div>
+                </div>
+
+                <div class="scale-card warning-card">
+                    <div class="scale-card-top">
+                        <span class="scale-range">400 — 599</span>
+                        <span class="scale-badge warning">✕ Warning</span>
+                    </div>
+                    <h3 class="scale-card-title">Not Consummable</h3>
+                    <p class="scale-card-desc">Water quality is below safe threshold. Moderate particle interference detected. Not recommended for drinking.</p>
+                    <div class="scale-card-footer">
+                        <span class="scale-footer-label">ADC Range</span>
+                        <span class="scale-footer-value warning-text">400 to 599</span>
+                    </div>
+                </div>
+
+                <div class="scale-card microplastic-card">
+                    <div class="scale-card-top">
+                        <span class="scale-range">0 — 399</span>
+                        <span class="scale-badge microplastic">⚠ Danger</span>
+                    </div>
+                    <h3 class="scale-card-title">High Microplastic Count</h3>
+                    <p class="scale-card-desc">Dangerous levels of microplastics detected. High particle interference blocking light transmission significantly.</p>
+                    <div class="scale-card-footer">
+                        <span class="scale-footer-label">ADC Range</span>
+                        <span class="scale-footer-value microplastic-text">Below 400</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <p class="scale-note">⚙ Values are based on photodiode ADC readings ranging from 0 to 1023. Higher values indicate clearer water with less particle interference.</p>
+
+        </div>
+    </section>
+
+    <!-- Purificn Tips Section -->
+
+    <section class="purification-tips" id="purification-tips">
+        <div class="tips-container">
+
+            <div class="readings-header">
+                <p class="tips-label">Stay Safe</p>
+                <h2 class="tips-title">Purification Tips</h2>
+                <p class="tips-intro">If your water scan shows unsafe levels, here are the most effective ways to purify your water before consumption.</p>
+            </div>
+
+            <div class="tips-cards">
+
+                <div class="tip-card">
+                    <div class="tip-icon boil"></div>
+                    <h3 class="tip-title">Boil Your Water</h3>
+                    <p class="tip-desc">Bring water to a full rolling boil for at least 1 minute. This kills most bacteria, viruses and pathogens effectively.</p>
+                    <span class="tip-tag">Most Effective</span>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon filter"></div>
+                    <h3 class="tip-title">Use a Micro Filter</h3>
+                    <p class="tip-desc">Microfilters with pore sizes of 0.1–0.4 microns can physically remove microplastics and large contaminants from water.</p>
+                    <span class="tip-tag">Microplastics</span>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon carbon"></div>
+                    <h3 class="tip-title">Activated Carbon Filter</h3>
+                    <p class="tip-desc">Carbon filters absorb chemicals, heavy metals and organic compounds improving taste, odor and overall water safety.</p>
+                    <span class="tip-tag">Chemical Removal</span>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon uv"></div>
+                    <h3 class="tip-title">UV Purification</h3>
+                    <p class="tip-desc">Ultraviolet light disrupts the DNA of microorganisms rendering them harmless. Highly effective against bacteria and viruses.</p>
+                    <span class="tip-tag">Bacteria & Viruses</span>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon chlorine"></div>
+                    <h3 class="tip-title">Chlorination</h3>
+                    <p class="tip-desc">Adding a small measured amount of chlorine to water kills most harmful microorganisms. Widely used in municipal water treatment.</p>
+                    <span class="tip-tag">Disinfection</span>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon osmosis"></div>
+                    <h3 class="tip-title">Reverse Osmosis</h3>
+                    <p class="tip-desc">Forces water through a semi-permeable membrane removing up to 99% of contaminants including microplastics, salts and heavy metals.</p>
+                    <span class="tip-tag">Deep Purification</span>
+                </div>
+
+            </div>
+
+            <p class="tips-note">Note — These tips are general guidelines. Always consult a water quality professional for severely contaminated water sources.</p>
+
+        </div>
+    </section>
+
+    <!-- Our Team Section -->
+
+    <section class="our-team" id="our-team">
+        <div class="team-container">
+
+            <div class="readings-header">
+                <p class="team-label">The People Behind It</p>
+                <h2 class="team-title">OUR TEAM</h2>
+                <p class="team-intro">A dedicated group of students passionate about water quality research and building technology that makes a difference.</p>
+            </div>
+
+            <div class="team-photo-wrapper">
+                <img src="team.png" alt="Our Team" class="team-photo">
+                <div class="team-photo-overlay">
+                    <span>Our Team</span>
+                </div>
+            </div>
+
+            <div class="team-cards">
+
+                <div class="team-card leader-card">
+                    <div class="team-avatar">AI</div>
+                    <div class="team-info">
+                        <div class="team-name-row">
+                            <h3 class="team-name">Aaditya</h3>
+                            <span class="team-badge leader">Group Leader</span>
+                        </div>
+                        <p class="team-bio">Leads the project vision and technical development. Responsible for overseeing all aspects of the water quality scanning system and ensuring project milestones are met.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar">AN</div>
+                    <div class="team-info">
+                        <div class="team-name-row">
+                            <h3 class="team-name">Aanya</h3>
+                            <span class="team-badge assistant">Assistant Leader</span>
+                        </div>
+                        <p class="team-bio">Supports project coordination and research documentation. Plays a key role in data analysis and ensuring the accuracy of water quality readings and results.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar">AR</div>
+                    <div class="team-info">
+                        <div class="team-name-row">
+                            <h3 class="team-name">Aaryan</h3>
+                            <span class="team-badge member">Group Member</span>
+                        </div>
+                        <p class="team-bio">Contributes to the hardware integration and sensor calibration of the photodiode system. Focuses on ensuring reliable and consistent readings from the scanning module.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar">AD</div>
+                    <div class="team-info">
+                        <div class="team-name-row">
+                            <h3 class="team-name">Aadarsh</h3>
+                            <span class="team-badge member">Group Member</span>
+                        </div>
+                        <p class="team-bio">Handles research and testing of water purification methods. Responsible for validating the reference scale values and documenting experimental results.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-avatar">AB</div>
+                    <div class="team-info">
+                        <div class="team-name-row">
+                            <h3 class="team-name">Abdul</h3>
+                            <span class="team-badge member">Group Member</span>
+                        </div>
+                        <p class="team-bio">Supports the frontend development and visual design of the website. Focuses on delivering a clean and professional user experience across all sections.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>
